@@ -29,7 +29,7 @@ Mengganti Job ID saja tidak mengganti workspace/project.
 
 ## Jalankan
 
-Ganti `JOB_ID` dengan ID pada URL assignment milik pengguna tersebut,
+Ganti `JOB_ID` dengan ID pada URL assignment milik pengguna,
 yaitu bagian setelah `/annotate/job/`.
 
 Periksa daftar assignment terlebih dahulu:
