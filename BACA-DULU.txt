@@ -1,0 +1,113 @@
+ASISTEN LABELING IKAN — PAKET UNTUK TEMAN
+Disiapkan 12 Oktober 2026
+
+Paket ini memakai SAM 3 melalui layanan Roboflow untuk membuat kandidat
+bounding box pada gambar kosong di assignment. Hasil perlu diperiksa dan
+dikoreksi. Tidak perlu melatih model ikan sebelum mencoba script ini.
+
+TUJUAN DEFAULT
+Workspace: rifkirozak35-gmail-com
+Project: sipandu-tambak (SIpandu Tambak)
+Kelas hasil job-label: ikan
+
+Yang menjalankan perlu punya akses API yang diizinkan untuk workspace,
+project, pembacaan assignment, preview SAM 3, dan penyimpanan anotasi.
+Role labeler di editor saja belum memastikan semua izin API tersedia.
+Gunakan credential yang diberikan/diizinkan pengelola workspace untuk
+pengguna tersebut. Jangan menyertakan API key pribadi dalam paket share.
+Key dimasukkan pada prompt tersembunyi terminal; tidak disimpan ke config.
+Credential PRIVATE workspace harus diperlakukan seperti password.
+https://docs.roboflow.com/reference/authentication/authentication.md
+
+1. INSTALASI DI WINDOWS
+Ekstrak seluruh ZIP ke folder pilihan, lalu buka terminal di folder yang
+berisi asisten_labeling.py dan requirements.txt. Instal Python 3.12 jika
+belum ada. Paket diperiksa menggunakan Python 3.12.
+
+  py -3.12 -m venv .venv
+  .\.venv\Scripts\python.exe -m pip install -r requirements.txt
+  .\.venv\Scripts\python.exe asisten_labeling.py --help
+
+Jika perintah py tidak tersedia dan python sudah menunjuk Python 3.12,
+perintah pembuatan venv dapat diganti menjadi: python -m venv .venv
+Teman membuat .venv baru di komputernya; jangan menyalin .venv milik Rifqi.
+Instalasi membutuhkan internet. Paket tidak menyertakan bobot model/GPU.
+Deteksi berlangsung di layanan Roboflow dan mengirim potongan foto ke sana.
+
+2. AMBIL JOB ID MILIK SENDIRI
+Buka assignment teman di Roboflow. Contoh pola URL:
+  https://app.roboflow.com/WORKSPACE/PROJECT/annotate/job/JOB_ID_TEMAN
+Job ID adalah bagian setelah /job/.
+Ganti JOB_ID_TEMAN pada semua perintah di bawah dengan ID sebenarnya.
+Jangan memakai Job ID milik Rifqi untuk assignment yang berbeda.
+
+3. PERIKSA AKSES DAN DAFTAR ASSIGNMENT
+Perintah ini membaca daftar gambar; belum mendeteksi atau menulis label.
+
+  .\.venv\Scripts\python.exe asisten_labeling.py job-plan --job-id JOB_ID_TEMAN
+
+Masukkan PRIVATE API key yang diizinkan ketika diminta. Karakter input
+tidak terlihat; paste key lalu tekan Enter. Periksa jumlah gambar dan
+Pemeriksaan lengkap: True pada hasil. Pastikan assignment benar.
+Jika HTTP 401/403, minta pengelola workspace memeriksa key dan izin API.
+
+4. UJI SATU GAMBAR KOSONG, HASIL LOKAL DAHULU
+Perintah tanpa --send belum menulis label ke editor Roboflow.
+
+  .\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID_TEMAN --limit 1 --tile-size 1024 --confidence 0.4 --request-delay 10
+
+Periksa original.boxes.jpg dan gambar zoom dalam folder:
+  hasil-asisten\assignment\IMAGE_ID\review
+IMAGE_ID dan lokasi review dicetak oleh script. Banyak kandidat tidak
+membuktikan banyak ikan benar. Foto blur/pantulan dapat menghasilkan
+sedikit deteksi atau false positive.
+
+5. KIRIM KANDIDAT PADA GAMBAR YANG BARUSAN DIPERIKSA
+Ganti IMAGE_ID dengan ID dari langkah 4, sehingga tidak beralih foto.
+Parameter sama memungkinkan cache potongan dipakai kembali.
+
+  .\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID_TEMAN --image-id IMAGE_ID --limit 1 --tile-size 1024 --confidence 0.4 --request-delay 10 --send
+
+Script melewati foto yang sudah berlabel atau statusnya tidak pasti.
+Jika label diubah selama deteksi, script memeriksa ulang sebelum mengirim.
+Dengan --send, hasil 0 atau kurang dari 5 kotak ditahan untuk review dan
+batch berhenti. Ambang 5 kotak adalah pengaman jumlah, bukan ukuran akurasi.
+Setelah terkirim, buka link editor dan periksa/koreksi setiap kandidat.
+Tidak ada Submit Review, approval, atau Add to Dataset otomatis.
+
+6. LANJUTKAN BERTAHAP
+Setelah satu foto dinilai memadai, --limit 1 bisa diganti --limit 5.
+Gunakan assignment berbeda untuk pekerjaan masing-masing teman.
+Jeda 10 detik membantu mengurangi frekuensi permintaan, tetapi tidak
+menjamin batas layanan bebas 429 jika beberapa pengguna berjalan bersamaan.
+
+HTTP 429: pembatasan permintaan; job-label mencoba ulang terbatas.
+Default 2 retry per potongan; total cooldown 429 maksimal 180 detik per
+proses. Waktu pemrosesan dan jeda normal terpisah dari batas cooldown.
+HTTP 502: Bad Gateway; versi ini berhenti, tidak otomatis retry 502.
+Untuk melanjutkan error deteksi, ulangi satu IMAGE_ID dengan parameter
+yang sama. Cache potongan berhasil dipakai; jangan menghapusnya.
+
+7. JIKA WORKSPACE/PROJECT BERBEDA
+Paket ini ditujukan untuk proyek SIpandu Tambak dengan kelas ikan.
+Untuk workspace/project lain yang memakai kelas ikan, ubah hanya nilai
+WORKSPACE dan PROJECT di bagian atas asisten_labeling.py, lalu uji job-plan.
+Mengganti Job ID saja tidak mengganti workspace/project.
+Untuk kelas selain ikan, alur job-label perlu disesuaikan lebih lanjut.
+
+ISI PAKET
+Tujuh modul Python, requirements.txt, dan panduan ini.
+Tidak menyertakan API key, .env, foto, anotasi contoh, cache, hasil review,
+venv, atau launcher yang otomatis menjalankan assignment milik Rifqi.
+Bagikan ZIP ini; jangan ZIP seluruh folder kerja yang berisi data Anda.
+
+VERSI DAN BATAS PEMERIKSAAN
+Paket berisi salinan kode yang sama dengan script lokal per 12 Oktober.
+Dependensi utama dipatok ke versi yang ada di lingkungan lokal.
+Import modul, CLI --help, dan kelengkapan ZIP diperiksa tanpa API key.
+Instalasi dan akses API dari komputer/akun teman belum diuji.
+SAM 3 tetap model siap pakai; menyalin script tidak melatih model dengan
+contoh anotasi atau otomatis meningkatkan akurasi.
+
+Dokumentasi API yang dipakai:
+https://roboflow.github.io/roboflow-python/core/project/

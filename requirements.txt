@@ -1,0 +1,5 @@
+# Dependensi untuk asisten_labeling.py (assignment/preview/review).
+# Versi utama sama dengan lingkungan lokal yang sudah dipakai.
+roboflow==1.7.0
+Pillow==12.3.0
+requests==2.34.2

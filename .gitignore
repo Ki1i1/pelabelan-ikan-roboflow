@@ -1,0 +1,24 @@
+# Environment dan credential lokal
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Cache Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Data dan hasil lokal
+hasil-asisten/
+data-review/
+acuan-koreksi/
+katalog-model.json
+config.json
+
+# Editor dan sistem operasi
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
