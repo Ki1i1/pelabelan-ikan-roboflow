@@ -29,32 +29,32 @@ Mengganti Job ID saja tidak mengganti workspace/project.
 
 ## Jalankan
 
-Ganti `JOB_ID_TEMAN` dengan ID pada URL assignment milik pengguna tersebut,
+Ganti `JOB_ID` dengan ID pada URL assignment milik pengguna tersebut,
 yaitu bagian setelah `/annotate/job/`.
 
 Periksa daftar assignment terlebih dahulu:
 
 ```powershell
-.\.venv\Scripts\python.exe asisten_labeling.py job-plan --job-id JOB_ID_TEMAN
+.\.venv\Scripts\python.exe asisten_labeling.py job-plan --job-id JOB_ID
 ```
 
 Uji satu gambar tanpa mengirim label:
 
 ```powershell
-.\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID_TEMAN --limit 1 --tile-size 1024 --confidence 0.4 --request-delay 10
+.\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID --limit 1 --tile-size 1024 --confidence 0.4 --request-delay 10
 ```
 
 Buka gambar review yang lokasinya dicetak. Untuk mengirim kandidat pada
 gambar yang sama, ganti `IMAGE_ID` dengan ID dari hasil uji:
 
 ```powershell
-.\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID_TEMAN --image-id IMAGE_ID --limit 1 --tile-size 1024 --confidence 0.4 --request-delay 10 --send
+.\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID--image-id IMAGE_ID --limit 1 --tile-size 1024 --confidence 0.4 --request-delay 10 --send
 ```
 
 Setelah uji satu gambar dinilai memadai, proses maksimal lima gambar kosong:
 
 ```powershell
-.\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID_TEMAN --limit 5 --tile-size 1024 --confidence 0.4 --request-delay 10 --send
+.\.venv\Scripts\python.exe asisten_labeling.py job-label --job-id JOB_ID --limit 5 --tile-size 1024 --confidence 0.4 --request-delay 10 --send
 ```
 
 `--limit` menghitung gambar, bukan jumlah bounding box. Dengan `--send`,
