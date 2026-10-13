@@ -76,8 +76,6 @@ Foto blur atau pantulan kuat bisa menghasilkan deteksi sedikit atau keliru.
 SAM 3 tidak otomatis belajar dari koreksi anotasi pengguna.
 
 Panduan lengkap ada dalam [BACA-DULU.txt](BACA-DULU.txt).
-Paket share yang sudah disiapkan tersedia sebagai
-[asisten-labeling-ikan-untuk-teman.zip](asisten-labeling-ikan-untuk-teman.zip).
 
 Kode dan import modul diperiksa secara lokal menggunakan Python 3.12.
 Instalasi dan akses API pada akun pengguna lain belum diuji.
